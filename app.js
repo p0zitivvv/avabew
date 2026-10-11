@@ -65,7 +65,16 @@ const els = {
 
     settingsModal: document.getElementById('settingsModal'),
     navSettingsBtn: document.getElementById('navSettingsBtn'),
-    settingsForm: document.getElementById('settingsForm')
+    mobileSettingsBtn: document.getElementById('mobileSettingsBtn'),
+    settingsForm: document.getElementById('settingsForm'),
+
+    // Day Chips & Mobile Nav
+    dayChipsContainer: document.getElementById('dayChipsContainer'),
+    bottomNavDash: document.getElementById('bottomNavDash'),
+    bottomNavPlanner: document.getElementById('bottomNavPlanner'),
+    bottomNavAdd: document.getElementById('bottomNavAdd'),
+    bottomNavStats: document.getElementById('bottomNavStats'),
+    bottomNavSettings: document.getElementById('bottomNavSettings')
 };
 
 // --- Initialization ---
@@ -212,8 +221,9 @@ function updateTodayGoal() {
 
 
 function renderWeeklyPlanner() {
-    // Clear container
+    // Clear containers
     els.daysContainer.innerHTML = '';
+    if (els.dayChipsContainer) els.dayChipsContainer.innerHTML = '';
 
     const startDate = new Date(currentDisplayWeekStart);
     const endDate = new Date(startDate);
@@ -237,7 +247,41 @@ function renderWeeklyPlanner() {
 
         const isToday = dateStr === todayStr;
 
+        // 1. Day Chip for 1-tap navigation
+        if (els.dayChipsContainer) {
+            const chip = document.createElement('div');
+            chip.className = `day-chip ${isToday ? 'active' : ''}`;
+            chip.dataset.index = i;
+            chip.dataset.date = dateStr;
+
+            const weekdayShort = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(currDate);
+            const dayNum = currDate.getDate();
+
+            chip.innerHTML = `
+                <span class="day-chip-weekday">${weekdayShort}</span>
+                <span class="day-chip-number">${dayNum}</span>
+                ${dayTasks.length > 0 ? `
+                    <div class="day-chip-dots">
+                        <span class="day-chip-dot"></span>
+                    </div>
+                ` : ''}
+            `;
+
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const targetCard = document.getElementById(`dayCard_${i}`);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                }
+            });
+
+            els.dayChipsContainer.appendChild(chip);
+        }
+
+        // 2. Day Card
         const card = document.createElement('div');
+        card.id = `dayCard_${i}`;
         card.className = `day-card ${isToday ? 'active-today' : ''}`;
 
         const dayName = new Intl.DateTimeFormat('en-US', { weekday: 'long' }).format(currDate);
@@ -294,6 +338,43 @@ function renderWeeklyPlanner() {
             toggleTask(item.dataset.id);
         });
     });
+
+    // Sync Day Chips when swiping day cards
+    if (els.dayChipsContainer) {
+        let scrollTimeout;
+        els.daysContainer.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const containerRect = els.daysContainer.getBoundingClientRect();
+                const containerCenter = containerRect.left + containerRect.width / 2;
+
+                let closestIndex = 0;
+                let minDiff = Infinity;
+
+                for (let i = 0; i < 7; i++) {
+                    const card = document.getElementById(`dayCard_${i}`);
+                    if (card) {
+                        const cardRect = card.getBoundingClientRect();
+                        const cardCenter = cardRect.left + cardRect.width / 2;
+                        const diff = Math.abs(cardCenter - containerCenter);
+                        if (diff < minDiff) {
+                            minDiff = diff;
+                            closestIndex = i;
+                        }
+                    }
+                }
+
+                document.querySelectorAll('.day-chip').forEach((c, idx) => {
+                    if (idx === closestIndex) {
+                        c.classList.add('active');
+                        c.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'nearest' });
+                    } else {
+                        c.classList.remove('active');
+                    }
+                });
+            }, 80);
+        }, { passive: true });
+    }
 }
 
 // --- Actions & Helpers ---
@@ -398,14 +479,57 @@ function setupEventListeners() {
         els.addTaskModal.classList.remove('active');
     });
 
-    // Settings Modal
-    els.navSettingsBtn.addEventListener('click', (e) => {
-        e.preventDefault();
+    // Settings Modal Open Helper
+    function openSettingsModal() {
         document.getElementById('settingsDateInput').value = state.targetDate;
         document.getElementById('settingsInitialInput').value = state.initialScore;
         document.getElementById('settingsTargetInput').value = state.targetScore;
         document.getElementById('settingsGoalInput').value = state.dailyGoalMin;
         els.settingsModal.classList.add('active');
+    }
+
+    // Add Task Modal Open Helper
+    function openAddTaskModal() {
+        document.getElementById('taskDateInput').value = getLocalDateString(new Date());
+        els.addTaskModal.classList.add('active');
+    }
+
+    // Add Task Modal Triggers
+    els.addTaskBtn.addEventListener('click', openAddTaskModal);
+    if (els.bottomNavAdd) {
+        els.bottomNavAdd.addEventListener('click', openAddTaskModal);
+    }
+
+    // Mobile Bottom Navigation Handlers
+    const bottomNavItems = [
+        { el: els.bottomNavDash, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+        { el: els.bottomNavPlanner, action: () => document.querySelector('.planner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) },
+        { el: els.bottomNavStats, action: () => document.querySelector('.skills-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) },
+        { el: els.bottomNavSettings, action: openSettingsModal }
+    ];
+
+    bottomNavItems.forEach(({ el, action }) => {
+        if (el) {
+            el.addEventListener('click', () => {
+                bottomNavItems.forEach(item => item.el?.classList.remove('active'));
+                el.classList.add('active');
+                action();
+            });
+        }
+    });
+
+    // Mobile Header Settings Button
+    if (els.mobileSettingsBtn) {
+        els.mobileSettingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSettingsModal();
+        });
+    }
+
+    // Desktop Settings Modal Trigger
+    els.navSettingsBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openSettingsModal();
     });
 
     document.querySelectorAll('.close-settings').forEach(btn => {

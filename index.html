@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="index.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
+
 <body class="dark-theme">
     <div class="app-container">
         <!-- Sidebar / Navigation -->
@@ -19,7 +21,7 @@
                 <i class="fa-solid fa-graduation-cap"></i>
                 <span>IELTS <span class="highlight">Tracker</span></span>
             </div>
-            
+
             <nav class="nav-menu">
                 <a href="#" class="nav-item active"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
                 <a href="#" class="nav-item"><i class="fa-solid fa-calendar-check"></i> Planner</a>
@@ -27,9 +29,14 @@
                 <a href="#" class="nav-item" id="navSettingsBtn"><i class="fa-solid fa-gear"></i> Settings</a>
             </nav>
 
-            <div class="theme-toggle" id="themeToggle">
-                <i class="fa-solid fa-moon"></i>
-                <span>Dark Mode</span>
+            <div class="sidebar-actions">
+                <button class="mobile-header-btn" id="mobileSettingsBtn" title="Settings" aria-label="Settings">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+                <div class="theme-toggle" id="themeToggle">
+                    <i class="fa-solid fa-moon"></i>
+                    <span>Dark Mode</span>
+                </div>
             </div>
         </aside>
 
@@ -60,7 +67,7 @@
                     </div>
                     <div class="countdown-value" id="daysLeft">--</div>
                     <div class="countdown-label">DAYS LEFT</div>
-                    
+
                     <div class="score-comparison">
                         <div class="score-item">
                             <span class="score-label">INITIAL</span>
@@ -82,7 +89,7 @@
                     <div class="progress-bar-container large">
                         <div class="progress-fill brand-fill" id="overallProgressFill" style="width: 0%;"></div>
                     </div>
-                    
+
                     <div class="stats-mini-grid">
                         <div class="stat-mini">
                             <span class="stat-mini-val" id="tasksCompletedStat">0</span>
@@ -102,7 +109,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="card today-card">
                     <div class="card-header">
                         <h2>Today's Goal</h2>
@@ -141,7 +148,8 @@
                                 <span class="skill-percent" id="listeningProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill cyan-fill" id="listeningProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill cyan-fill" id="listeningProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -150,7 +158,8 @@
                                 <span class="skill-percent" id="readingProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill purple-fill" id="readingProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill purple-fill" id="readingProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -159,7 +168,8 @@
                                 <span class="skill-percent" id="writingProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill orange-fill" id="writingProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill orange-fill" id="writingProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -168,7 +178,8 @@
                                 <span class="skill-percent" id="speakingProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill green-fill" id="speakingProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill green-fill" id="speakingProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -177,7 +188,8 @@
                                 <span class="skill-percent" id="grammarProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill yellow-fill" id="grammarProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill yellow-fill" id="grammarProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                         <div class="skill-item">
@@ -186,7 +198,8 @@
                                 <span class="skill-percent" id="vocabularyProgressText">0%</span>
                             </div>
                             <div class="progress-bar-container small">
-                                <div class="progress-fill pink-fill" id="vocabularyProgressFill" style="width: 0%;"></div>
+                                <div class="progress-fill pink-fill" id="vocabularyProgressFill" style="width: 0%;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -203,12 +216,16 @@
                         <button class="icon-btn" id="nextWeekBtn"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
                 </div>
-                
+
+                <div class="day-chips-container" id="dayChipsContainer">
+                    <!-- Day chips generated by JS -->
+                </div>
+
                 <div class="days-container" id="daysContainer">
                     <!-- Day cards will be generated by JS -->
                 </div>
             </div>
-            
+
         </main>
     </div>
 
@@ -306,7 +323,34 @@
         </div>
     </div>
 
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <button class="bottom-nav-item active" id="bottomNavDash" type="button">
+            <i class="fa-solid fa-chart-line"></i>
+            <span>Dashboard</span>
+        </button>
+        <button class="bottom-nav-item" id="bottomNavPlanner" type="button">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span>Planner</span>
+        </button>
+        <button class="bottom-nav-item fab-item" id="bottomNavAdd" type="button" aria-label="Add Task">
+            <div class="fab-circle">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+            <span>Add</span>
+        </button>
+        <button class="bottom-nav-item" id="bottomNavStats" type="button">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>Skills</span>
+        </button>
+        <button class="bottom-nav-item" id="bottomNavSettings" type="button">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+        </button>
+    </nav>
+
     <!-- Script references -->
     <script src="app.js"></script>
 </body>
+
 </html>
