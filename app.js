@@ -500,23 +500,47 @@ function setupEventListeners() {
         els.bottomNavAdd.addEventListener('click', openAddTaskModal);
     }
 
-    // Mobile Bottom Navigation Handlers
-    const bottomNavItems = [
-        { el: els.bottomNavDash, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-        { el: els.bottomNavPlanner, action: () => document.querySelector('.planner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) },
-        { el: els.bottomNavStats, action: () => document.querySelector('.skills-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' }) },
-        { el: els.bottomNavSettings, action: openSettingsModal }
-    ];
+    // Tab Switching Function
+    function switchTab(tabId) {
+        const isMobile = window.innerWidth <= 768;
 
-    bottomNavItems.forEach(({ el, action }) => {
-        if (el) {
-            el.addEventListener('click', () => {
-                bottomNavItems.forEach(item => item.el?.classList.remove('active'));
-                el.classList.add('active');
-                action();
+        // Update Bottom Nav Active States
+        if (els.bottomNavDash) els.bottomNavDash.classList.toggle('active', tabId === 'tabDashboard');
+        if (els.bottomNavPlanner) els.bottomNavPlanner.classList.toggle('active', tabId === 'tabPlanner');
+        if (els.bottomNavStats) els.bottomNavStats.classList.toggle('active', tabId === 'tabSkills');
+
+        if (isMobile) {
+            // Mobile: Switch tab view display
+            document.querySelectorAll('.tab-view').forEach(tab => {
+                tab.classList.remove('active');
             });
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // Desktop: Smooth scroll
+            const targetSec = document.getElementById(tabId);
+            if (targetSec) {
+                targetSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
-    });
+    }
+
+    // Mobile Bottom Navigation Handlers
+    if (els.bottomNavDash) {
+        els.bottomNavDash.addEventListener('click', () => switchTab('tabDashboard'));
+    }
+    if (els.bottomNavPlanner) {
+        els.bottomNavPlanner.addEventListener('click', () => switchTab('tabPlanner'));
+    }
+    if (els.bottomNavStats) {
+        els.bottomNavStats.addEventListener('click', () => switchTab('tabSkills'));
+    }
+    if (els.bottomNavSettings) {
+        els.bottomNavSettings.addEventListener('click', openSettingsModal);
+    }
 
     // Mobile Header Settings Button
     if (els.mobileSettingsBtn) {

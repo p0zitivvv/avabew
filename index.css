@@ -985,109 +985,200 @@ textarea:focus {
     }
 }
 
+/* Desktop Tab Views (all visible) */
+@media (min-width: 769px) {
+    .tab-view {
+        display: block !important;
+        margin-bottom: 28px;
+    }
+}
+
 @media (max-width: 768px) {
     body {
-        font-size: 14px;
+        font-size: 13px;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    /* Tab Switcher for Mobile */
+    .tab-view {
+        display: none;
+    }
+
+    .tab-view.active {
+        display: block;
+        animation: fadeInTab 0.2s ease-out;
+    }
+
+    @keyframes fadeInTab {
+        from {
+            opacity: 0;
+            transform: translateY(4px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .main-content {
-        padding: 16px 14px;
-        padding-bottom: calc(90px + env(safe-area-inset-bottom, 0));
+        padding: 12px 12px;
+        padding-bottom: calc(76px + env(safe-area-inset-bottom, 0));
         overflow-x: hidden;
     }
 
+    /* Ultra Compact Mobile Header */
     .top-header {
-        flex-direction: column;
-        gap: 16px;
-        align-items: stretch;
-        margin-bottom: 24px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 12px;
     }
 
     .header-title h1 {
-        font-size: 26px;
+        font-size: 18px;
+        line-height: 1.2;
+    }
+
+    .header-title .subtitle {
+        display: none;
     }
 
     .header-actions {
         display: flex;
-        gap: 12px;
-        width: 100%;
+        gap: 8px;
+        width: auto;
+        align-items: center;
     }
 
     .streak-badge {
-        flex: 1;
-        justify-content: center;
-        font-size: 13px;
-        padding: 10px;
+        flex: none;
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 100px;
     }
 
     .top-header #addTaskBtn {
-        flex: 1.2;
-        justify-content: center;
-        padding: 10px 16px;
-        font-size: 14px;
+        flex: none;
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 100px;
     }
 
-    /* Dashboard Grid Mobile */
+    /* Compact Mobile Dashboard Grid (Fits on 1 Screen!) */
     .dashboard-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-        margin-bottom: 20px;
+        gap: 10px;
+        margin-bottom: 12px;
     }
 
     .card {
-        padding: 20px 18px;
+        padding: 12px 14px;
         border-radius: var(--radius-md);
     }
 
     .card-header {
-        margin-bottom: 16px;
+        margin-bottom: 8px;
+    }
+
+    .card-header h2 {
+        font-size: 14px;
     }
 
     .countdown-value {
-        font-size: clamp(38px, 12vw, 48px);
+        font-size: 32px;
+        margin-bottom: 2px;
     }
 
     .countdown-label {
-        margin-bottom: 20px;
+        font-size: 10px;
+        letter-spacing: 0.5px;
+        margin-bottom: 10px;
     }
 
     .score-comparison {
-        padding: 14px;
+        padding: 8px 12px;
+        border-radius: var(--radius-sm);
+        margin-top: 2px;
+    }
+
+    .score-label {
+        font-size: 10px;
     }
 
     .score-val {
-        font-size: 20px;
+        font-size: 16px;
     }
 
-    .stats-mini-grid {
-        gap: 14px;
-    }
-
-    .stat-mini-val {
-        font-size: 18px;
-    }
-
-    .stat-mini-label {
+    .score-arrow {
         font-size: 12px;
     }
 
+    .progress-val-large {
+        font-size: 18px;
+    }
+
+    .progress-bar-container.large {
+        height: 7px;
+        margin-bottom: 8px;
+    }
+
+    .stats-mini-grid {
+        gap: 6px;
+    }
+
+    .stat-mini {
+        padding: 6px 8px;
+        border-radius: var(--radius-sm);
+    }
+
+    .stat-mini-val {
+        font-size: 15px;
+    }
+
+    .stat-mini-label {
+        font-size: 10px;
+    }
+
     .today-stats {
-        gap: 20px;
-        margin-bottom: 16px;
+        gap: 14px;
+        margin-bottom: 8px;
     }
 
     .today-time {
-        font-size: 20px;
+        font-size: 17px;
     }
 
-    /* Skills Grid Mobile */
+    .today-label {
+        font-size: 10px;
+    }
+
+    .progress-bar-container {
+        height: 6px;
+    }
+
+    .progress-summary {
+        font-size: 11px;
+        margin-top: 6px;
+    }
+
+    /* Compact Skills Grid */
     .skills-section {
-        margin-bottom: 24px;
+        margin-bottom: 12px;
+    }
+
+    .skills-card {
+        padding: 14px;
     }
 
     .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .skill-item {
+        padding: 10px 12px;
     }
 
     .skill-info {
@@ -1095,54 +1186,93 @@ textarea:focus {
         margin-bottom: 6px;
     }
 
-    /* Weekly Planner Mobile */
+    /* Compact Weekly Planner */
+    .planner-section {
+        padding: 12px;
+        border-radius: var(--radius-md);
+    }
+
     .planner-header {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-        margin-bottom: 16px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .planner-header h2 {
+        font-size: 15px;
     }
 
     .planner-controls {
-        width: 100%;
-        justify-content: space-between;
-        padding: 6px 12px;
+        width: auto;
+        padding: 4px 8px;
+        border-radius: 100px;
     }
 
     .week-range {
-        font-size: 13px;
-        min-width: auto;
+        font-size: 11px;
+        padding: 0 6px;
+    }
+
+    .day-chips-container {
+        padding: 0 0 10px 0;
+        margin-bottom: 6px;
+        gap: 6px;
+    }
+
+    .day-chip {
+        padding: 6px 10px;
+        min-width: 50px;
+        font-size: 12px;
+        border-radius: var(--radius-sm);
+    }
+
+    .day-chip-weekday {
+        font-size: 10px;
+    }
+
+    .day-chip-number {
+        font-size: 14px;
     }
 
     .days-container {
-        padding-bottom: 20px;
+        padding-bottom: 14px;
         scroll-snap-type: x mandatory;
-        gap: 12px;
+        gap: 10px;
     }
 
     .day-card {
         min-width: calc(100vw - 44px);
         max-width: calc(100vw - 44px);
         scroll-snap-align: center;
-        padding: 16px;
+        padding: 12px;
     }
 
     .day-name {
-        font-size: 15px;
+        font-size: 14px;
+    }
+
+    .day-date {
+        font-size: 11px;
     }
 
     .task-item {
-        padding: 10px;
-        gap: 10px;
+        padding: 8px 10px;
+        gap: 8px;
     }
 
     .task-checkbox {
-        width: 22px;
-        height: 22px;
+        width: 20px;
+        height: 20px;
     }
 
     .task-name {
         font-size: 13px;
+    }
+
+    .task-meta {
+        font-size: 11px;
     }
 
     /* Mobile Inputs - Prevent iOS Auto Zoom */
